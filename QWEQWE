@@ -105,6 +105,77 @@ button.MouseButton1Click:Connect(function()
 
 	print("✅ Loaded!")
 end)
+button.Size = UDim2.new(0.9, 0, 0, 45)
+button.Position = UDim2.new(0.05, 0, 0.50, 0)
+button.Text = "Start Auto Moreira"
+button.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
+button.TextColor3 = Color3.fromRGB(0, 0, 0)
+button.TextSize = 18
+button.Font = Enum.Font.GothamBold
+button.Parent = frame
+
+local buttonCorner = Instance.new("UICorner")
+buttonCorner.CornerRadius = UDim.new(0, 8)
+buttonCorner.Parent = button
+
+---------------------------------
+-- LOADING BAR
+---------------------------------
+local loadingBar = Instance.new("Frame")
+loadingBar.Size = UDim2.new(0.9, 0, 0, 10)
+loadingBar.Position = UDim2.new(0.05, 0, 0.78, 0)
+loadingBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40) -- DARK GREY
+loadingBar.Visible = false
+loadingBar.Parent = frame
+
+local barCorner = Instance.new("UICorner")
+barCorner.CornerRadius = UDim.new(0, 6)
+barCorner.Parent = loadingBar
+
+local fill = Instance.new("Frame")
+fill.Size = UDim2.new(0, 0, 1, 0)
+fill.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- BASE COLOR (gets covered by gradient)
+fill.Parent = loadingBar
+
+local fillCorner = Instance.new("UICorner")
+fillCorner.CornerRadius = UDim.new(0, 6)
+fillCorner.Parent = fill
+
+-- 🔵🔴 GRADIENT (RED → BLUE)
+local gradient = Instance.new("UIGradient")
+gradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)), -- Red
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 255))  -- Blue
+}
+gradient.Parent = fill
+
+---------------------------------
+-- START BUTTON LOADING BAR
+---------------------------------
+local running = false
+
+button.MouseButton1Click:Connect(function()
+	if running then return end
+	running = true
+
+	button.Text = "Auto Moreira starting..."
+	button.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
+
+	loadingBar.Visible = true
+	fill.Size = UDim2.new(0, 0, 1, 0)
+
+	for i = 1, 100 do
+		fill.Size = UDim2.new(i / 100, 0, 1, 0)
+		task.wait(0.20)
+	end
+
+	button.Text = "Please wait!"
+	button.BackgroundColor3 = Color3.fromRGB(0, 200, 80)
+	button.Active = false
+	button.AutoButtonColor = false
+
+	print("✅ Loaded!")
+end)
 button.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
 button.TextColor3 = Color3.fromRGB(0, 0, 0)
 button.TextSize = 18
