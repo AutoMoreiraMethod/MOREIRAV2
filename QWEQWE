@@ -3,14 +3,11 @@ local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "AutoBuyGUI"
 gui.ResetOnSpawn = false
 
----------------------------------
--- MAIN FRAME
----------------------------------
+
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 280, 0, 200)
 frame.Position = UDim2.new(0.5, -140, 0.5, -100)
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- DARK GREY FRAME
-frame.BorderSizePixel = 0
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.Active = true
 frame.Draggable = true
 frame.Parent = gui
@@ -30,9 +27,7 @@ title.Font = Enum.Font.GothamBold
 title.TextWrapped = true
 title.Parent = frame
 
----------------------------------
--- START BUTTON
----------------------------------
+
 local button = Instance.new("TextButton")
 button.Size = UDim2.new(0.9, 0, 0, 45)
 button.Position = UDim2.new(0.05, 0, 0.50, 0)
@@ -47,13 +42,11 @@ local buttonCorner = Instance.new("UICorner")
 buttonCorner.CornerRadius = UDim.new(0, 8)
 buttonCorner.Parent = button
 
----------------------------------
--- LOADING BAR
----------------------------------
+
 local loadingBar = Instance.new("Frame")
 loadingBar.Size = UDim2.new(0.9, 0, 0, 10)
 loadingBar.Position = UDim2.new(0.05, 0, 0.78, 0)
-loadingBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40) -- DARK GREY
+loadingBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 loadingBar.Visible = false
 loadingBar.Parent = frame
 
@@ -63,24 +56,20 @@ barCorner.Parent = loadingBar
 
 local fill = Instance.new("Frame")
 fill.Size = UDim2.new(0, 0, 1, 0)
-fill.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- BASE COLOR (gets covered by gradient)
+fill.BackgroundColor3 = Color3.fromRGB(255, 0, 0) 
 fill.Parent = loadingBar
 
 local fillCorner = Instance.new("UICorner")
 fillCorner.CornerRadius = UDim.new(0, 6)
 fillCorner.Parent = fill
 
--- 🔵🔴 GRADIENT (RED → BLUE)
 local gradient = Instance.new("UIGradient")
 gradient.Color = ColorSequence.new{
-	ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)), -- Red
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 255))  -- Blue
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 255))
 }
 gradient.Parent = fill
 
----------------------------------
--- START BUTTON LOADING BAR
----------------------------------
 local running = false
 
 button.MouseButton1Click:Connect(function()
