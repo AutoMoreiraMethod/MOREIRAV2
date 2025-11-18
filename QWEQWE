@@ -1,21 +1,72 @@
-local player = game.Players.LocalPlayer
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local player = Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+
 gui.Name = "AutoBuyGUI"
 gui.ResetOnSpawn = false
 
-
+---------------------------------------------------------
+-- MAIN FRAME
+---------------------------------------------------------
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 280, 0, 200)
 frame.Position = UDim2.new(0.5, -140, 0.5, -100)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-frame.Active = true
-frame.Draggable = true
+frame.BorderSizePixel = 0
 frame.Parent = gui
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 12)
 corner.Parent = frame
 
+---------------------------------------------------------
+-- DRAGGABLE SYSTEM (WORKS ON ALL EXECUTORS)
+---------------------------------------------------------
+local dragging = false
+local dragInput
+local dragStart
+local startPos
+
+local function update(input)
+	local delta = input.Position - dragStart
+	frame.Position = UDim2.new(
+		startPos.X.Scale,
+		startPos.X.Offset + delta.X,
+		startPos.Y.Scale,
+		startPos.Y.Offset + delta.Y
+	)
+end
+
+frame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		dragStart = input.Position
+		startPos = frame.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+frame.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement then
+		dragInput = input
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		update(input)
+	end
+end)
+
+---------------------------------------------------------
+-- TITLE
+---------------------------------------------------------
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, 0, 0, 50)
 title.BackgroundTransparency = 1
@@ -27,7 +78,9 @@ title.Font = Enum.Font.GothamBold
 title.TextWrapped = true
 title.Parent = frame
 
-
+---------------------------------------------------------
+-- BUTTON
+---------------------------------------------------------
 local button = Instance.new("TextButton")
 button.Size = UDim2.new(0.9, 0, 0, 45)
 button.Position = UDim2.new(0.05, 0, 0.50, 0)
@@ -42,7 +95,9 @@ local buttonCorner = Instance.new("UICorner")
 buttonCorner.CornerRadius = UDim.new(0, 8)
 buttonCorner.Parent = button
 
-
+---------------------------------------------------------
+-- LOADING BAR
+---------------------------------------------------------
 local loadingBar = Instance.new("Frame")
 loadingBar.Size = UDim2.new(0.9, 0, 0, 10)
 loadingBar.Position = UDim2.new(0.05, 0, 0.78, 0)
@@ -56,7 +111,7 @@ barCorner.Parent = loadingBar
 
 local fill = Instance.new("Frame")
 fill.Size = UDim2.new(0, 0, 1, 0)
-fill.BackgroundColor3 = Color3.fromRGB(255, 0, 0) 
+fill.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 fill.Parent = loadingBar
 
 local fillCorner = Instance.new("UICorner")
@@ -70,8 +125,10 @@ gradient.Color = ColorSequence.new{
 }
 gradient.Parent = fill
 
+---------------------------------------------------------
+-- LOADING ACTION
+---------------------------------------------------------
 local running = false
-
 button.MouseButton1Click:Connect(function()
 	if running then return end
 	running = true
@@ -91,6 +148,4 @@ button.MouseButton1Click:Connect(function()
 	button.BackgroundColor3 = Color3.fromRGB(0, 200, 80)
 	button.Active = false
 	button.AutoButtonColor = false
-
-	print("✅ Loaded!")
 end)
